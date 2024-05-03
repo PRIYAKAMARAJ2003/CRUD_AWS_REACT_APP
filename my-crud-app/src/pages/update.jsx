@@ -40,70 +40,72 @@ const UpdateForm = () => {
   };
 
   return (
-    <div>
-      <h2>Update Details</h2>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Email"
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          variant="outlined"
-          margin="normal"
-          required
-        />
-        <br />
-        <TextField
-          label="First Name"
-          type="text"
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleChange}
-          variant="outlined"
-          margin="normal"
-          required
-        />
-        <br />
-        <TextField
-          label="Last Name"
-          type="text"
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleChange}
-          variant="outlined"
-          margin="normal"
-          required
-        />
-        <br />
-        <TextField
-          label="Comments"
-          name="comments"
-          value={formData.comments}
-          onChange={handleChange}
-          variant="outlined"
-          margin="normal"
-          multiline
-          rows={4}
-        />
-        <br />
-        <TextField
-          label="Options"
-          name="options"
-          value={formData.options}
-          onChange={handleChange}
-          variant="outlined"
-          margin="normal"
-          multiline
-          rows={4}
-        />
-        <br />
-        <Button variant="contained" color="primary" type="submit" disabled={loading}>
-          Update
-        </Button>
-      </form>
-      {error && <div>{error}</div>}
-      {successMessage && <div>{successMessage}</div>}
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <div>
+        <h2>Update Details</h2>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            label="Email"
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            variant="outlined"
+            margin="normal"
+            required
+          />
+          <br />
+          <TextField
+            label="First Name"
+            type="text"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            variant="outlined"
+            margin="normal"
+            required
+          />
+          <br />
+          <TextField
+            label="Last Name"
+            type="text"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            variant="outlined"
+            margin="normal"
+            required
+          />
+          <br />
+          <TextField
+            label="Comments"
+            name="comments"
+            value={formData.comments}
+            onChange={handleChange}
+            variant="outlined"
+            margin="normal"
+            multiline
+            rows={4}
+          />
+          <br />
+          <TextField
+            label="Options"
+            name="options"
+            value={formData.options}
+            onChange={handleChange}
+            variant="outlined"
+            margin="normal"
+            multiline
+            rows={4}
+          />
+          <br />
+          <Button variant="contained" color="primary" type="submit" disabled={loading}>
+            Update
+          </Button>
+        </form>
+        {error && <div>{error}</div>}
+        {successMessage && <div>{successMessage}</div>}
+      </div>
     </div>
   );
 };
