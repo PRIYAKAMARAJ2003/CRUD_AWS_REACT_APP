@@ -1,68 +1,89 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-const ReadForm = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('https://jpnc3r9b22.execute-api.eu-west-1.amazonaws.com/DEV/create', {
-          httpMethod: 'GET'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, makeStyles, TablePagination } from '@material-ui/core';
+ 
+const useStyles = makeStyles({
+    container: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        flexDirection: 'column',
+        marginLeft: '30%',
+        width:'100%',
+    },
+});
+ 
+function ReadForm() {
+    const classes = useStyles();
+    const [movies, setMovies] = useState([]);
+    const [page, setPage] = useState(0);
+    const rowsPerPage = 3;
+ 
+    useEffect(() => {
+        fetch('https://jpnc3r9b22.execute-api.eu-west-1.amazonaws.com/DEV/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "httpMethod": "GET"
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Parse the JSON string in the body to convert it into an array
+            const parsedData = JSON.parse(data.body);
+            setMovies(parsedData);
+        })
+        .catch(error => {
+            console.error('Error fetching movies:', error);
         });
-        console.log('API Response:', response.data); // Log the response data
-        setData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error); // Log any errors
-        setError(error);
-        setLoading(false);
-      }
-      
+    }, []);
+ 
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
     };
-
-    fetchData();
-  }, []);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-
-  return (
-    <div>
-      <h2>Data:</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Comments</th>
-            <th>Options</th>
-          </tr>
-        </thead>
-        <tbody>
-          {(() => {
-            const rows = [];
-            for (let i = 0; i < data.length; i++) {
-              const item = data[i];
-              rows.push(
-                <tr key={i}>
-                  <td>{item.firstname}</td>
-                  <td>{item.lastname}</td>
-                  <td>{item.email}</td>
-                  <td>{item.comments}</td>
-                  <td>{item.options}</td>
-                </tr>
-              );
-            }
-            return rows;
-          })()}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-
+ 
+    return (
+        <div className={classes.container}>
+            <Typography variant="h2">Read</Typography>
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>First Name</TableCell>
+                            <TableCell>Last Name</TableCell>
+                            <TableCell>Email</TableCell>
+                            <TableCell>Comments</TableCell>
+                            <TableCell>Options</TableCell>
+                            {/* Add more table headers if needed */}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {movies.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(movie => (
+                            <TableRow key={movie.id}>
+                                <TableCell>{movie.firstName}</TableCell>
+                                <TableCell>{movie.lastName}</TableCell>
+                                <TableCell>{movie.email}</TableCell>
+                                <TableCell>{movie.comments}</TableCell>
+                                <TableCell>{movie.options}</TableCell>
+                                {/* Render more table data if needed */}
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <TablePagination
+                rowsPerPageOptions={[]}
+                component="div"
+                count={movies.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={handleChangePage}
+            />
+        </div>
+    );
+}
+ 
 export default ReadForm;
+ 
